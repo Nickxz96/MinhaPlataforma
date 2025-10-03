@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class Menu : MonoBehaviour
 {
+    public GameObject painel;
     void Start()
     {
         Time.timeScale = 1f;
@@ -17,5 +18,16 @@ public class Menu : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void creditos()
+    {
+        painel.SetActive(true);
+    }
+
+
+    public void voltar()
+    {
+        painel.SetActive(false);
     }
 }

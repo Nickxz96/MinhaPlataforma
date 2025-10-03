@@ -10,15 +10,33 @@ public class Player : MonoBehaviour
     Rigidbody2D rb;
     Vector2 movimento;
     public int pulo = 36;
-    bool ehchao = true;
+
+    [Header("Check Chão")]
+    public Transform checkChao;
+    public float raioChao = 0.2f;
+    public LayerMask oQueEChao;
+    public bool noChao;
+
+    public int pulosMAx = 2;
+    int restaPulos;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        restaPulos = pulosMAx;
     }
 
     void Update()
     {
+        noChao = Physics2D.OverlapCircle(checkChao.position, raioChao, oQueEChao);
+        if (noChao)
+        {
+            restaPulos = pulosMAx;
+        }
 
+        if(movimento.x != 0)
+        {
+            transform.localScale = new Vector3(Mathf.Sign(movimento.x), 1, 1);
+        }
     }
 
     public void OnMover(InputAction.CallbackContext context)
@@ -29,10 +47,10 @@ public class Player : MonoBehaviour
 
     public void OnPular(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Performed && ehchao)
+        if(context.phase == InputActionPhase.Performed && restaPulos >0)
         {
             rb.AddForce(Vector2.up * pulo);
-            ehchao = false;
+            restaPulos--;
         }
     }
 
@@ -41,11 +59,9 @@ public class Player : MonoBehaviour
         rb.velocity=new Vector2(movimento.x * velocidade, rb.velocity.y);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    void OnDrawGizmos()
     {
-        if(collision.gameObject.CompareTag("chao"))
-        {
-            ehchao = true;
-        }
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(checkChao.position, raioChao);
     }
 }
