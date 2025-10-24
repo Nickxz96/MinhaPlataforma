@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
 
     public int pulosMAx = 2;
     int restaPulos;
+
+    public AudioSource somPassos;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -27,6 +29,10 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if(movimento.x != 0 && noChao)
+        {
+            somPassos.Play();
+        }
         noChao = Physics2D.OverlapCircle(checkChao.position, raioChao, oQueEChao);
         if (noChao)
         {
